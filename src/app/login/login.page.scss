@@ -1,0 +1,28 @@
+
+.login-wrapper {
+	height: 100%;
+	align-items: center;
+	padding: 15px 16px;
+    background-color: #1B1313;
+    color: #806E6E;
+}
+
+.login-wrapper ion-title {
+	width: 100%;
+	max-width: 420px; 
+}
+
+.login-wrapper ion-input {
+	width: 100%;
+}
+
+
+.login-wrapper ion-title + ion-title {
+	margin-top: 12px;
+}
+
+h1{
+    color: #806E6E;
+    text-align: center;
+}
+

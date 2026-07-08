@@ -1,0 +1,30 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+   <div style="text-align: center; background-color: #190D0D;">
+    <img src="assets/img/monke_smile.jpg" alt="Logo" style="  margin: 10px auto; width: 30%; height: 30px;">
+    <img src="assets/img/monke_smile.jpg" alt="Logo" style=" padding-left: 5px; margin: 10px auto; width: 30%; height: 30px;">
+    <img src="assets/img/monke_smile.jpg" alt="Logo" style="padding-left: 5px; margin: 10px auto; width: 30%; height: 30px;">
+  </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" >
+
+  <div class="login-wrapper ion-text-center">
+    <img src="assets/img/Le_monke.webp" alt="Logo" style="display: block; margin: 20px auto; width: 100px; height: 200px;">
+    <h1>
+      ¡Bienvenido a Le Monke App!
+    </h1>
+    <ion-text class="ion-padding-top">
+      <ion-input label="Nombre de Usuario" labelPlacement="floating" placeholder="Ingrese su usuario"></ion-input>
+    </ion-text>
+    <ion-text class="ion-padding-top">
+      <ion-input label="Contraseña" labelPlacement="floating" type="password" placeholder="Ingrese su Contraseña"></ion-input>
+    </ion-text>
+    <div class="ion-padding-top ">
+      <ion-button color="medium">Inicia sesión</ion-button> <ion-button color="medium" [disabled]="true">Registrar</ion-button>
+    </div>
+    
+  </div>
+  
+</ion-content>
