@@ -1,20 +1,49 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      Home
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
+<ion-content [fullscreen]="true" class="ion-padding">
   <div id="container">
     <strong>¡Bienvenido, {{ usuario }}!</strong>
     <p>Has iniciado sesión correctamente.</p>
   </div>
+
+  <form #datosForm="ngForm">
+    <ion-item>
+      <ion-input label="Nombre" labelPlacement="floating" placeholder="Ingrese su nombre"
+        name="nombre" [(ngModel)]="nombre"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input label="Apellido" labelPlacement="floating" placeholder="Ingrese su apellido"
+        name="apellido" [(ngModel)]="apellido"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-select label="Nivel de Educación" labelPlacement="floating" placeholder="Seleccione"
+        interface="popover" name="nivelEducacion" [(ngModel)]="nivelEducacion">
+        <ion-select-option value="basica">Educación Básica</ion-select-option>
+        <ion-select-option value="media">Educación Media</ion-select-option>
+        <ion-select-option value="tecnica">Técnica/Profesional</ion-select-option>
+        <ion-select-option value="universitaria">Universitaria</ion-select-option>
+        <ion-select-option value="postgrado">Postgrado</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <mat-form-field appearance="outline" class="ion-margin-top full-width">
+      <mat-label>Fecha de Nacimiento</mat-label>
+      <input matInput [matDatepicker]="picker" name="fechaNacimiento" [(ngModel)]="fechaNacimiento">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="ion-padding-top ion-text-center">
+      <ion-button color="medium" (click)="limpiar()">Limpiar</ion-button>
+      <ion-button color="medium" (click)="mostrar()">Mostrar</ion-button>
+    </div>
+  </form>
 </ion-content>
