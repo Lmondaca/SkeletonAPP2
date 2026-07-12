@@ -34,4 +34,41 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+/* @import "@ionic/angular/css/palettes/dark.system.css"; */
+
+/* Angular Material theme, required for the MatDatepicker used in Home */
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+
+/* Keep the white/gray skeleton theme's text-selection highlight instead of the
+   browser/OS default (which turns black under system dark mode). */
+::selection {
+  background: #d0d0d0;
+  color: #000000;
+}
+
+/* Ionic renders alert buttons as flat text by default (no background/border),
+   which combined with this theme's white --ion-color-primary made the button
+   invisible. Give it real button chrome instead of plain text. */
+ion-alert .alert-button {
+  flex: 0 0 auto !important;
+  min-width: 96px;
+  margin: 4px 8px 12px !important;
+  padding: 8px 20px !important;
+  border: none !important;
+  border-radius: 6px;
+  background-color: #333333 !important;
+  color: #ffffff !important;
+  font-weight: 500;
+}
+
+ion-alert .alert-button-group,
+ion-alert .alert-button-inner {
+  justify-content: center !important;
+}
+
+/* Alert messages render as plain text (Ionic disables inline HTML by default
+   to avoid XSS from user-entered values), so line breaks need \n + this rule
+   instead of <br>. */
+ion-alert .alert-message {
+  white-space: pre-line;
+}

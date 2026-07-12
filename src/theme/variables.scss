@@ -1,2 +1,55 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+
+/* Skeleton App theme: white / gray / black palette */
+:root {
+  --ion-color-primary: #ffffff;
+  --ion-color-primary-rgb: 255, 255, 255;
+  --ion-color-primary-contrast: #000000;
+  --ion-color-primary-contrast-rgb: 0, 0, 0;
+  --ion-color-primary-shade: #e0e0e0;
+  --ion-color-primary-tint: #ffffff;
+
+  --ion-color-secondary: #6b6b6b;
+  --ion-color-secondary-rgb: 107, 107, 107;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #5e5e5e;
+  --ion-color-secondary-tint: #7a7a7a;
+
+  --ion-color-tertiary: #b0b0b0;
+  --ion-color-tertiary-rgb: 176, 176, 176;
+  --ion-color-tertiary-contrast: #000000;
+  --ion-color-tertiary-contrast-rgb: 0, 0, 0;
+  --ion-color-tertiary-shade: #9b9b9b;
+  --ion-color-tertiary-tint: #b8b8b8;
+
+  --ion-color-dark: #1a1a1a;
+  --ion-color-dark-rgb: 26, 26, 26;
+  --ion-color-dark-contrast: #ffffff;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
+  --ion-color-dark-shade: #171717;
+  --ion-color-dark-tint: #313131;
+
+  --ion-color-medium: #808080;
+  --ion-color-medium-rgb: 128, 128, 128;
+  --ion-color-medium-contrast: #ffffff;
+  --ion-color-medium-contrast-rgb: 255, 255, 255;
+  --ion-color-medium-shade: #717171;
+  --ion-color-medium-tint: #8d8d8d;
+
+  --ion-color-light: #f4f4f4;
+  --ion-color-light-rgb: 244, 244, 244;
+  --ion-color-light-contrast: #000000;
+  --ion-color-light-contrast-rgb: 0, 0, 0;
+  --ion-color-light-shade: #d7d7d7;
+  --ion-color-light-tint: #f5f5f5;
+
+  --ion-background-color: #ffffff;
+  --ion-background-color-rgb: 255, 255, 255;
+  --ion-text-color: #333333;
+  --ion-text-color-rgb: 51, 51, 51;
+
+  --ion-toolbar-background: #000000;
+  --ion-toolbar-color: #ffffff;
+}
