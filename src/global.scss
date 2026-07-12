@@ -34,4 +34,11 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+/* @import "@ionic/angular/css/palettes/dark.system.css"; */
+
+/* Keep the white/gray skeleton theme's text-selection highlight instead of the
+   browser/OS default (which turns black under system dark mode). */
+::selection {
+  background: #d0d0d0;
+  color: #000000;
+}
