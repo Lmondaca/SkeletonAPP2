@@ -1,8 +1,16 @@
-import { CanActivateFn } from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
+import { UsuarioService } from '../services/usuario.service';
 
-// TODO: hoy no hay persistencia de sesión (UsuarioService vive solo en memoria),
-// así que se asume siempre autenticado. Reemplazar por una verificación real
-// (token/sesión guardada) cuando se implemente persistencia.
+// UsuarioService respalda la sesión en localStorage, así que sobrevive a un
+// refresh de la app.
 export const authGuard: CanActivateFn = () => {
-  return true;
+  const usuarioService = inject(UsuarioService);
+  const router = inject(Router);
+
+  if (usuarioService.usuario) {
+    return true;
+  }
+
+  return router.parseUrl('/login');
 };

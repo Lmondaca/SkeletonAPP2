@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { UsuarioService } from '../services/usuario.service';
+import { BdService } from '../services/bd.service';
 
 @Component({
   selector: 'app-login',
@@ -18,20 +20,43 @@ export class LoginPage implements OnInit {
 
   constructor(
     private router: Router,
-    private usuarioService: UsuarioService
+    private alertController: AlertController,
+    private usuarioService: UsuarioService,
+    private bdService: BdService
   ) { }
 
   ngOnInit() {
   }
 
-  ingresar() {
+  async ingresar() {
     if (!this.usuarioPattern.test(this.usuario) || !this.contrasenaPattern.test(this.contrasena)) {
       return;
     }
 
-    this.usuarioService.usuario = this.usuario;
+    try {
+      const credencialesValidas = await this.bdService.validarCredenciales(this.usuario, this.contrasena);
 
-    this.router.navigate(['/home'], { replaceUrl: true });
+      if (!credencialesValidas) {
+        const alert = await this.alertController.create({
+          header: 'Error',
+          message: 'Usuario o contraseña incorrectos.',
+          buttons: ['OK']
+        });
+        await alert.present();
+        return;
+      }
+
+      this.usuarioService.usuario = this.usuario;
+
+      this.router.navigate(['/home'], { replaceUrl: true });
+    } catch (error) {
+      const alert = await this.alertController.create({
+        header: 'Error',
+        message: 'No se pudo validar el usuario.',
+        buttons: ['OK']
+      });
+      await alert.present();
+    }
   }
 
   irRegistro() {

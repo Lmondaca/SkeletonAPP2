@@ -5,7 +5,6 @@ import { authGuard } from './guards/auth.guard';
 const routes: Routes = [
   {
     path: 'login',
-    canActivate: [authGuard],
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   },
   {
@@ -41,7 +40,6 @@ const routes: Routes = [
   },
   {
     path: 'registro',
-    canActivate: [authGuard],
     loadChildren: () => import('./registro/registro.module').then( m => m.RegistroPageModule)
   },
   {
@@ -51,7 +49,6 @@ const routes: Routes = [
   },
   {
     path: 'not-found',
-    canActivate: [authGuard],
     loadChildren: () => import('./not-found/not-found.module').then( m => m.NotFoundPageModule)
   },
   {
