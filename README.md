@@ -40,10 +40,28 @@ ionic build --prod
 
 ### Testing
 
-Para ejecutar las pruebas unitarias:
+#### Pruebas unitarias (Jasmine + Karma)
+
 ```bash
-ng test
+npm test              # modo watch, abre Chrome
+npm run test:ci       # una sola corrida, headless (usa Edge si no hay Chrome instalado)
 ```
+
+Los servicios que dependen de SQLite nativo (`BdService`) se reemplazan por spies/mocks en los tests (ver `src/testing/sqlite-mock.ts`), ya que el plugin solo funciona en el dispositivo/emulador real.
+
+#### Pruebas end-to-end (Cypress)
+
+```bash
+npm run e2e           # abre la UI interactiva de Cypress
+npm run e2e:run       # corre todos los specs en modo headless (Edge)
+```
+
+Cypress apunta a `http://localhost:4200` (ver `cypress.config.ts`), así que la app debe estar corriendo en ese puerto antes de ejecutar los tests:
+```bash
+ionic serve --port 4200
+```
+
+Los specs (`cypress/e2e/*.cy.ts`) cubren login, perfil, movimiento, movimientos, auto-movi, auto-movimientos y resumen. Como SQLite nativo no existe al correr en el navegador, estos tests validan el comportamiento real y observable en ese entorno (validaciones de formulario, guards de rutas, filtros, mensajes de error esperados por la falta de base de datos), no el flujo completo de persistencia — eso requiere un dispositivo/emulador nativo.
 
 ## Flujo de la Aplicación
 
@@ -125,6 +143,8 @@ Del lado de esta app quedaron marcados los puntos de extensión con TODOs, sin i
 - `src/assets/` - Recursos estáticos (íconos e imágenes)
 - `src/environments/` - Configuraciones de entorno
 - `src/theme/` - Estilos globales y variables (paleta blanco/gris/negro)
+- `src/testing/` - Mocks compartidos para las pruebas unitarias (ej. `sqlite-mock.ts`)
+- `cypress/e2e/` - Pruebas end-to-end (una por página)
 - `android/` - Proyecto nativo de Android generado por Capacitor (`npx cap add android`)
 
 ## Dependencias Destacadas
