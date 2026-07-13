@@ -1,6 +1,20 @@
 // Karma configuration file, see link for more information
 // https://karma-runner.github.io/1.0/config/configuration-file.html
 
+// karma-chrome-launcher only auto-detects Chrome/Chromium; fall back to Edge
+// (Chromium-based) via CHROME_BIN when no Chrome install is found.
+if (!process.env.CHROME_BIN) {
+  const fs = require('fs');
+  const edgePaths = [
+    'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
+    'C:/Program Files/Microsoft/Edge/Application/msedge.exe'
+  ];
+  const edgePath = edgePaths.find((p) => fs.existsSync(p));
+  if (edgePath) {
+    process.env.CHROME_BIN = edgePath;
+  }
+}
+
 module.exports = function (config) {
   config.set({
     basePath: '',
@@ -38,6 +52,12 @@ module.exports = function (config) {
     logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['Chrome'],
+    customLaunchers: {
+      ChromeHeadlessCI: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox', '--disable-gpu']
+      }
+    },
     singleRun: false,
     restartOnFileChange: true
   });

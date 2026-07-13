@@ -26,7 +26,7 @@ export class AutoMoviPage {
   ) {}
 
   async guardar() {
-    if (!this.nombre || this.monto == null || !this.fechaFactura) {
+    if (!this.nombre || this.monto == null || this.monto <= 0 || !this.fechaFactura) {
       return;
     }
 

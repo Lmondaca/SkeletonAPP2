@@ -25,6 +25,10 @@ export class MovimientoPage {
   ) {}
 
   async guardar() {
+    if (this.monto === null || this.monto <= 0) {
+      return;
+    }
+
     try {
       await this.bdService.agregarMovimiento({
         usuario: this.usuarioService.usuario,

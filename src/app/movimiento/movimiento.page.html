@@ -18,8 +18,12 @@
 
     <ion-item>
       <ion-input label="Monto" labelPlacement="floating" placeholder="Ingrese el monto"
-        type="number" name="monto" [(ngModel)]="monto"></ion-input>
+        type="number" name="monto" [(ngModel)]="monto" #montoField="ngModel"
+        required min="0.01"></ion-input>
     </ion-item>
+    <ion-note color="danger" *ngIf="montoField.invalid && montoField.touched">
+      El monto debe ser mayor a 0.
+    </ion-note>
 
     <ion-item>
       <ion-label>Tipo</ion-label>
