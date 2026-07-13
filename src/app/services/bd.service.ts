@@ -9,6 +9,14 @@ export interface UsuarioRegistrado {
   contrasena: string;
 }
 
+export interface Perfil {
+  usuario: string;
+  nombre: string;
+  apellido: string;
+  nivelEducacion: string;
+  fechaNacimiento: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -48,6 +56,19 @@ export class BdService {
       )`,
       []
     );
+
+    await this.db.executeSql(
+      `CREATE TABLE IF NOT EXISTS perfiles (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        usuario TEXT NOT NULL UNIQUE,
+        nombre TEXT NOT NULL,
+        apellido TEXT NOT NULL,
+        nivel_educacion TEXT NOT NULL,
+        fecha_nacimiento TEXT NOT NULL,
+        FOREIGN KEY (usuario) REFERENCES usuarios (usuario)
+      )`,
+      []
+    );
   }
 
   async guardarUsuario(usuario: UsuarioRegistrado): Promise<void> {
@@ -76,6 +97,51 @@ export class BdService {
     );
 
     return resultado.rows.length > 0;
+  }
+
+  async guardarPerfil(perfil: Perfil): Promise<void> {
+    await this.listo;
+
+    if (!this.db) {
+      throw new Error('SQLite no está disponible en este entorno (solo funciona en el dispositivo nativo).');
+    }
+
+    await this.db.executeSql(
+      `INSERT INTO perfiles (usuario, nombre, apellido, nivel_educacion, fecha_nacimiento)
+       VALUES (?, ?, ?, ?, ?)
+       ON CONFLICT(usuario) DO UPDATE SET
+         nombre = excluded.nombre,
+         apellido = excluded.apellido,
+         nivel_educacion = excluded.nivel_educacion,
+         fecha_nacimiento = excluded.fecha_nacimiento`,
+      [perfil.usuario, perfil.nombre, perfil.apellido, perfil.nivelEducacion, perfil.fechaNacimiento]
+    );
+  }
+
+  async obtenerPerfil(usuario: string): Promise<Perfil | null> {
+    await this.listo;
+
+    if (!this.db) {
+      throw new Error('SQLite no está disponible en este entorno (solo funciona en el dispositivo nativo).');
+    }
+
+    const resultado = await this.db.executeSql(
+      'SELECT usuario, nombre, apellido, nivel_educacion, fecha_nacimiento FROM perfiles WHERE usuario = ?',
+      [usuario]
+    );
+
+    if (resultado.rows.length === 0) {
+      return null;
+    }
+
+    const fila = resultado.rows.item(0);
+    return {
+      usuario: fila.usuario,
+      nombre: fila.nombre,
+      apellido: fila.apellido,
+      nivelEducacion: fila.nivel_educacion,
+      fechaNacimiento: fila.fecha_nacimiento
+    };
   }
 
 }
