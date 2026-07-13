@@ -34,6 +34,11 @@ log.txt
 /cypress/screenshots
 /cypress/downloads
 
+# Android release signing (secretos - NUNCA versionar)
+*.keystore
+*.jks
+android/keystore.properties
+
 # Node
 /node_modules
 npm-debug.log
