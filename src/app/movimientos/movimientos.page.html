@@ -47,6 +47,9 @@
         <p>Creado: {{ m.fechaCreacion | date:'short' }}</p>
         <p>Modificado: {{ m.fechaModificacion | date:'short' }}</p>
       </ion-label>
+      <ion-button slot="end" color="danger" fill="clear" (click)="eliminar(m)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-list>
 

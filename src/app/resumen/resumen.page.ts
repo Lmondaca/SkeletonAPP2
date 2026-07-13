@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ViewWillEnter } from '@ionic/angular';
 import { MatDatepicker } from '@angular/material/datepicker';
-import { MovimientoService } from '../services/movimiento.service';
+import { BdService } from '../services/bd.service';
+import { UsuarioService } from '../services/usuario.service';
 import { AutoMoviService } from '../services/auto-movi.service';
 
 interface ResumenItem {
@@ -31,19 +32,25 @@ export class ResumenPage implements ViewWillEnter {
   balance = 0;
 
   constructor(
-    private movimientoService: MovimientoService,
+    private bdService: BdService,
+    private usuarioService: UsuarioService,
     private autoMoviService: AutoMoviService
   ) {}
 
-  ionViewWillEnter() {
-    this.manualesOriginal = this.movimientoService.listar()
-      .map(m => ({
-        descripcion: m.descripcion,
-        monto: m.monto,
-        tipo: m.tipo,
-        fecha: m.fechaMovimiento
-      }))
-      .sort((a, b) => b.fecha.getTime() - a.fecha.getTime());
+  async ionViewWillEnter() {
+    try {
+      const registros = await this.bdService.listarMovimientos(this.usuarioService.usuario);
+      this.manualesOriginal = registros
+        .map(m => ({
+          descripcion: m.descripcion,
+          monto: m.monto,
+          tipo: m.tipo,
+          fecha: new Date(m.fechaMovimiento)
+        }))
+        .sort((a, b) => b.fecha.getTime() - a.fecha.getTime());
+    } catch (error) {
+      this.manualesOriginal = [];
+    }
 
     this.automaticos = this.autoMoviService.listar()
       .map(a => ({

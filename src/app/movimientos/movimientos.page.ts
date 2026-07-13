@@ -1,6 +1,17 @@
 import { Component } from '@angular/core';
-import { ViewWillEnter } from '@ionic/angular';
-import { Movimiento, MovimientoService } from '../services/movimiento.service';
+import { AlertController, ViewWillEnter } from '@ionic/angular';
+import { BdService } from '../services/bd.service';
+import { UsuarioService } from '../services/usuario.service';
+
+interface MovimientoVista {
+  id: number;
+  descripcion: string;
+  monto: number;
+  tipo: 'debito' | 'credito';
+  fechaMovimiento: Date;
+  fechaCreacion: Date;
+  fechaModificacion: Date;
+}
 
 @Component({
   selector: 'app-movimientos',
@@ -10,8 +21,8 @@ import { Movimiento, MovimientoService } from '../services/movimiento.service';
 })
 export class MovimientosPage implements ViewWillEnter {
 
-  movimientos: Movimiento[] = [];
-  movimientosFiltrados: Movimiento[] = [];
+  movimientos: MovimientoVista[] = [];
+  movimientosFiltrados: MovimientoVista[] = [];
 
   fechaDesde: Date | null = null;
   fechaHasta: Date | null = null;
@@ -19,13 +30,63 @@ export class MovimientosPage implements ViewWillEnter {
   totalCredito = 0;
   totalDebito = 0;
 
-  constructor(private movimientoService: MovimientoService) {}
+  constructor(
+    private bdService: BdService,
+    private usuarioService: UsuarioService,
+    private alertController: AlertController
+  ) {}
 
-  ionViewWillEnter() {
-    this.movimientos = this.movimientoService.listar();
+  async ionViewWillEnter() {
+    await this.cargarMovimientos();
     this.fechaDesde = null;
     this.fechaHasta = null;
     this.aplicarFiltro();
+  }
+
+  private async cargarMovimientos() {
+    try {
+      const registros = await this.bdService.listarMovimientos(this.usuarioService.usuario);
+      this.movimientos = registros.map(m => ({
+        id: m.id!,
+        descripcion: m.descripcion,
+        monto: m.monto,
+        tipo: m.tipo,
+        fechaMovimiento: new Date(m.fechaMovimiento),
+        fechaCreacion: new Date(m.fechaCreacion),
+        fechaModificacion: new Date(m.fechaModificacion)
+      }));
+    } catch (error) {
+      this.movimientos = [];
+    }
+  }
+
+  async eliminar(movimiento: MovimientoVista) {
+    const alert = await this.alertController.create({
+      header: 'Eliminar movimiento',
+      message: `¿Seguro que deseas eliminar "${movimiento.descripcion}"?`,
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: async () => {
+            try {
+              await this.bdService.eliminarMovimiento(movimiento.id);
+              await this.cargarMovimientos();
+              this.aplicarFiltro();
+            } catch (error) {
+              const errorAlert = await this.alertController.create({
+                header: 'Error',
+                message: 'No se pudo eliminar el movimiento.',
+                buttons: ['OK']
+              });
+              await errorAlert.present();
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   filtrar() {

@@ -17,6 +17,17 @@ export interface Perfil {
   fechaNacimiento: string;
 }
 
+export interface MovimientoRegistrado {
+  id?: number;
+  usuario: string;
+  descripcion: string;
+  monto: number;
+  tipo: 'debito' | 'credito';
+  fechaMovimiento: string;
+  fechaCreacion: string;
+  fechaModificacion: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -65,6 +76,21 @@ export class BdService {
         apellido TEXT NOT NULL,
         nivel_educacion TEXT NOT NULL,
         fecha_nacimiento TEXT NOT NULL,
+        FOREIGN KEY (usuario) REFERENCES usuarios (usuario)
+      )`,
+      []
+    );
+
+    await this.db.executeSql(
+      `CREATE TABLE IF NOT EXISTS movimientos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        usuario TEXT NOT NULL,
+        descripcion TEXT NOT NULL,
+        monto REAL NOT NULL,
+        tipo TEXT NOT NULL,
+        fecha_movimiento TEXT NOT NULL,
+        fecha_creacion TEXT NOT NULL,
+        fecha_modificacion TEXT NOT NULL,
         FOREIGN KEY (usuario) REFERENCES usuarios (usuario)
       )`,
       []
@@ -142,6 +168,62 @@ export class BdService {
       nivelEducacion: fila.nivel_educacion,
       fechaNacimiento: fila.fecha_nacimiento
     };
+  }
+
+  async agregarMovimiento(movimiento: Pick<MovimientoRegistrado, 'usuario' | 'descripcion' | 'monto' | 'tipo' | 'fechaMovimiento'>): Promise<void> {
+    await this.listo;
+
+    if (!this.db) {
+      throw new Error('SQLite no está disponible en este entorno (solo funciona en el dispositivo nativo).');
+    }
+
+    const ahora = new Date().toISOString();
+
+    await this.db.executeSql(
+      `INSERT INTO movimientos (usuario, descripcion, monto, tipo, fecha_movimiento, fecha_creacion, fecha_modificacion)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [movimiento.usuario, movimiento.descripcion, movimiento.monto, movimiento.tipo, movimiento.fechaMovimiento, ahora, ahora]
+    );
+  }
+
+  async listarMovimientos(usuario: string): Promise<MovimientoRegistrado[]> {
+    await this.listo;
+
+    if (!this.db) {
+      throw new Error('SQLite no está disponible en este entorno (solo funciona en el dispositivo nativo).');
+    }
+
+    const resultado = await this.db.executeSql(
+      'SELECT id, usuario, descripcion, monto, tipo, fecha_movimiento, fecha_creacion, fecha_modificacion FROM movimientos WHERE usuario = ? ORDER BY fecha_movimiento DESC',
+      [usuario]
+    );
+
+    const movimientos: MovimientoRegistrado[] = [];
+    for (let i = 0; i < resultado.rows.length; i++) {
+      const fila = resultado.rows.item(i);
+      movimientos.push({
+        id: fila.id,
+        usuario: fila.usuario,
+        descripcion: fila.descripcion,
+        monto: fila.monto,
+        tipo: fila.tipo,
+        fechaMovimiento: fila.fecha_movimiento,
+        fechaCreacion: fila.fecha_creacion,
+        fechaModificacion: fila.fecha_modificacion
+      });
+    }
+
+    return movimientos;
+  }
+
+  async eliminarMovimiento(id: number): Promise<void> {
+    await this.listo;
+
+    if (!this.db) {
+      throw new Error('SQLite no está disponible en este entorno (solo funciona en el dispositivo nativo).');
+    }
+
+    await this.db.executeSql('DELETE FROM movimientos WHERE id = ?', [id]);
   }
 
 }
