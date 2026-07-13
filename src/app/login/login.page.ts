@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { UsuarioService } from '../services/usuario.service';
 import { BdService } from '../services/bd.service';
+import { AutoMoviProcesadorService } from '../services/auto-movi-procesador.service';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,8 @@ export class LoginPage implements OnInit {
     private router: Router,
     private alertController: AlertController,
     private usuarioService: UsuarioService,
-    private bdService: BdService
+    private bdService: BdService,
+    private autoMoviProcesadorService: AutoMoviProcesadorService
   ) { }
 
   ngOnInit() {
@@ -47,6 +49,12 @@ export class LoginPage implements OnInit {
       }
 
       this.usuarioService.usuario = this.usuario;
+
+      try {
+        await this.autoMoviProcesadorService.procesar(this.usuario);
+      } catch (error) {
+        // Si falla la generación automática no debe bloquear el ingreso del usuario.
+      }
 
       this.router.navigate(['/home'], { replaceUrl: true });
     } catch (error) {

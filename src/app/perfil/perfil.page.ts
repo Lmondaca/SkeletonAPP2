@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ViewWillEnter } from '@ionic/angular';
 import { UsuarioService } from '../services/usuario.service';
+import { BdService } from '../services/bd.service';
 
 @Component({
   selector: 'app-perfil',
@@ -8,7 +9,7 @@ import { UsuarioService } from '../services/usuario.service';
   styleUrls: ['./perfil.page.scss'],
   standalone: false,
 })
-export class PerfilPage {
+export class PerfilPage implements ViewWillEnter {
 
   nombre = '';
   apellido = '';
@@ -17,27 +18,56 @@ export class PerfilPage {
 
   constructor(
     private alertController: AlertController,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private bdService: BdService
   ) {}
 
   get usuario(): string {
     return this.usuarioService.usuario;
   }
 
-  limpiar() {
-    this.nombre = '';
-    this.apellido = '';
-    this.nivelEducacion = '';
-    this.fechaNacimiento = null;
+  async ionViewWillEnter() {
+    try {
+      const perfil = await this.bdService.obtenerPerfil(this.usuario);
+      if (perfil) {
+        this.nombre = perfil.nombre;
+        this.apellido = perfil.apellido;
+        this.nivelEducacion = perfil.nivelEducacion;
+        this.fechaNacimiento = new Date(perfil.fechaNacimiento);
+      }
+    } catch (error) {
+      // SQLite no disponible (p. ej. ejecutando en el navegador con ionic serve).
+    }
   }
 
-  async mostrar() {
-    const alert = await this.alertController.create({
-      header: 'Usuario',
-      message: `Nombre: ${this.nombre || '-'}\nApellido: ${this.apellido || '-'}`,
-      buttons: ['OK']
-    });
-    await alert.present();
+  async guardar() {
+    if (!this.nombre || !this.apellido || !this.nivelEducacion || !this.fechaNacimiento) {
+      return;
+    }
+
+    try {
+      await this.bdService.guardarPerfil({
+        usuario: this.usuario,
+        nombre: this.nombre,
+        apellido: this.apellido,
+        nivelEducacion: this.nivelEducacion,
+        fechaNacimiento: this.fechaNacimiento.toISOString()
+      });
+
+      const alert = await this.alertController.create({
+        header: 'Perfil',
+        message: 'Los datos se guardaron correctamente.',
+        buttons: ['OK']
+      });
+      await alert.present();
+    } catch (error) {
+      const alert = await this.alertController.create({
+        header: 'Error',
+        message: 'No se pudo guardar el perfil.',
+        buttons: ['OK']
+      });
+      await alert.present();
+    }
   }
 
 }

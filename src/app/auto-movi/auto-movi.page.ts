@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { AutoMoviService } from '../services/auto-movi.service';
+import { BdService } from '../services/bd.service';
+import { UsuarioService } from '../services/usuario.service';
 
 @Component({
   selector: 'app-auto-movi',
@@ -17,8 +19,10 @@ export class AutoMoviPage {
   tipo: 'debito' | 'credito' = 'debito';
 
   constructor(
+    private router: Router,
     private alertController: AlertController,
-    private autoMoviService: AutoMoviService
+    private bdService: BdService,
+    private usuarioService: UsuarioService
   ) {}
 
   async guardar() {
@@ -26,26 +30,40 @@ export class AutoMoviPage {
       return;
     }
 
-    this.autoMoviService.agregar({
-      nombre: this.nombre,
-      monto: this.monto,
-      frecuencia: this.frecuencia,
-      fechaFactura: this.fechaFactura,
-      tipo: this.tipo
-    });
+    try {
+      await this.bdService.agregarAutoMovimiento({
+        usuario: this.usuarioService.usuario,
+        nombre: this.nombre,
+        monto: this.monto,
+        frecuencia: this.frecuencia,
+        fechaFactura: this.fechaFactura.toISOString(),
+        tipo: this.tipo
+      });
 
-    const alert = await this.alertController.create({
-      header: 'Movimiento Automático',
-      message: 'Movimiento automático guardado correctamente.',
-      buttons: ['OK']
-    });
-    await alert.present();
+      const alert = await this.alertController.create({
+        header: 'Movimiento Automático',
+        message: 'Movimiento automático guardado correctamente.',
+        buttons: ['OK']
+      });
+      await alert.present();
 
-    this.nombre = '';
-    this.monto = null;
-    this.frecuencia = 'mensual';
-    this.fechaFactura = null;
-    this.tipo = 'debito';
+      this.nombre = '';
+      this.monto = null;
+      this.frecuencia = 'mensual';
+      this.fechaFactura = null;
+      this.tipo = 'debito';
+    } catch (error) {
+      const alert = await this.alertController.create({
+        header: 'Error',
+        message: 'No se pudo guardar el movimiento automático.',
+        buttons: ['OK']
+      });
+      await alert.present();
+    }
+  }
+
+  irAutoMovimientos() {
+    this.router.navigate(['/auto-movimientos']);
   }
 
 }

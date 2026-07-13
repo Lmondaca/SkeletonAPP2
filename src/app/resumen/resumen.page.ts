@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ViewWillEnter } from '@ionic/angular';
 import { MatDatepicker } from '@angular/material/datepicker';
-import { MovimientoService } from '../services/movimiento.service';
-import { AutoMoviService } from '../services/auto-movi.service';
+import { BdService } from '../services/bd.service';
+import { UsuarioService } from '../services/usuario.service';
 
 interface ResumenItem {
   descripcion: string;
@@ -31,28 +31,38 @@ export class ResumenPage implements ViewWillEnter {
   balance = 0;
 
   constructor(
-    private movimientoService: MovimientoService,
-    private autoMoviService: AutoMoviService
+    private bdService: BdService,
+    private usuarioService: UsuarioService
   ) {}
 
-  ionViewWillEnter() {
-    this.manualesOriginal = this.movimientoService.listar()
-      .map(m => ({
-        descripcion: m.descripcion,
-        monto: m.monto,
-        tipo: m.tipo,
-        fecha: m.fechaMovimiento
-      }))
-      .sort((a, b) => b.fecha.getTime() - a.fecha.getTime());
+  async ionViewWillEnter() {
+    try {
+      const registros = await this.bdService.listarMovimientos(this.usuarioService.usuario);
+      this.manualesOriginal = registros
+        .map(m => ({
+          descripcion: m.descripcion,
+          monto: m.monto,
+          tipo: m.tipo,
+          fecha: new Date(m.fechaMovimiento)
+        }))
+        .sort((a, b) => b.fecha.getTime() - a.fecha.getTime());
+    } catch (error) {
+      this.manualesOriginal = [];
+    }
 
-    this.automaticos = this.autoMoviService.listar()
-      .map(a => ({
-        descripcion: a.nombre,
-        monto: a.monto,
-        tipo: a.tipo,
-        fecha: a.fechaFactura
-      }))
-      .sort((a, b) => b.fecha.getTime() - a.fecha.getTime());
+    try {
+      const autoRegistros = await this.bdService.listarAutoMovimientos(this.usuarioService.usuario);
+      this.automaticos = autoRegistros
+        .map(a => ({
+          descripcion: a.nombre,
+          monto: a.monto,
+          tipo: a.tipo,
+          fecha: new Date(a.fechaFactura)
+        }))
+        .sort((a, b) => b.fecha.getTime() - a.fecha.getTime());
+    } catch (error) {
+      this.automaticos = [];
+    }
 
     this.mesSeleccionado = new Date();
     this.aplicarFiltroMes();

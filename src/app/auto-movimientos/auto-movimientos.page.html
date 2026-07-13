@@ -4,7 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>
-      Movimientos
+      Movimientos Automáticos
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -38,22 +38,21 @@
     </ion-label>
   </ion-item>
 
-  <ion-list class="movimientos-list" *ngIf="movimientosFiltrados.length; else vacio">
-    <ion-item *ngFor="let m of movimientosFiltrados">
+  <ion-list class="movimientos-list" *ngIf="autoMovimientosFiltrados.length; else vacio">
+    <ion-item *ngFor="let a of autoMovimientosFiltrados">
       <ion-label>
-        <h2>{{ m.descripcion }}</h2>
-        <p>Monto: {{ m.monto }} · Tipo: {{ m.tipo === 'debito' ? 'Débito' : 'Crédito' }}</p>
-        <p>Movimiento: {{ m.fechaMovimiento | date:'short' }}</p>
-        <p>Creado: {{ m.fechaCreacion | date:'short' }}</p>
-        <p>Modificado: {{ m.fechaModificacion | date:'short' }}</p>
+        <h2>{{ a.nombre }}</h2>
+        <p>Monto: {{ a.monto }} · Tipo: {{ a.tipo === 'debito' ? 'Débito' : 'Crédito' }}</p>
+        <p>Frecuencia: {{ a.frecuencia === 'mensual' ? 'Mensual' : 'Anual' }}</p>
+        <p>Próxima Factura: {{ a.fechaFactura | date:'short' }}</p>
       </ion-label>
-      <ion-button slot="end" color="danger" fill="clear" (click)="eliminar(m)">
+      <ion-button slot="end" color="danger" fill="clear" (click)="eliminar(a)">
         <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
       </ion-button>
     </ion-item>
   </ion-list>
 
   <ng-template #vacio>
-    <p class="ion-text-center">No hay movimientos para el periodo seleccionado.</p>
+    <p class="ion-text-center">No hay movimientos automáticos para el periodo seleccionado.</p>
   </ng-template>
 </ion-content>

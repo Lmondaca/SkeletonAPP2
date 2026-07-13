@@ -39,6 +39,11 @@ const routes: Routes = [
     loadChildren: () => import('./auto-movi/auto-movi.module').then( m => m.AutoMoviPageModule)
   },
   {
+    path: 'auto-movimientos',
+    canActivate: [authGuard],
+    loadChildren: () => import('./auto-movimientos/auto-movimientos.module').then( m => m.AutoMovimientosPageModule)
+  },
+  {
     path: 'registro',
     loadChildren: () => import('./registro/registro.module').then( m => m.RegistroPageModule)
   },

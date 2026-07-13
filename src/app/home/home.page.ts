@@ -35,6 +35,10 @@ export class HomePage {
     this.router.navigate(['/auto-movi']);
   }
 
+  irAutoMovimientos() {
+    this.router.navigate(['/auto-movimientos']);
+  }
+
   irResumen() {
     this.router.navigate(['/resumen']);
   }
