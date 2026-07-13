@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { UsuarioService } from '../services/usuario.service';
 
 @Component({
   selector: 'app-home',
@@ -8,48 +8,35 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['home.page.scss'],
   standalone: false,
 })
-export class HomePage implements OnInit {
-
-  usuario = '';
-
-  nombre = '';
-  apellido = '';
-  nivelEducacion = '';
-  fechaNacimiento: Date | null = null;
-
-  private readonly nivelesEducacion: { [key: string]: string } = {
-    basica: 'Educación Básica',
-    media: 'Educación Media',
-    tecnica: 'Técnica/Profesional',
-    universitaria: 'Universitaria',
-    postgrado: 'Postgrado'
-  };
+export class HomePage {
 
   constructor(
-    private route: ActivatedRoute,
-    private alertController: AlertController
+    private router: Router,
+    private usuarioService: UsuarioService
   ) {}
 
-  ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.usuario = params['usuario'] ?? '';
-    });
+  get usuario(): string {
+    return this.usuarioService.usuario;
   }
 
-  limpiar() {
-    this.nombre = '';
-    this.apellido = '';
-    this.nivelEducacion = '';
-    this.fechaNacimiento = null;
+  irPerfil() {
+    this.router.navigate(['/perfil']);
   }
 
-  async mostrar() {
-    const alert = await this.alertController.create({
-      header: 'Usuario',
-      message: `Nombre: ${this.nombre || '-'}\nApellido: ${this.apellido || '-'}`,
-      buttons: ['OK']
-    });
-    await alert.present();
+  irMovimiento() {
+    this.router.navigate(['/movimiento']);
+  }
+
+  irMovimientos() {
+    this.router.navigate(['/movimientos']);
+  }
+
+  irAutoMovi() {
+    this.router.navigate(['/auto-movi']);
+  }
+
+  irResumen() {
+    this.router.navigate(['/resumen']);
   }
 
 }

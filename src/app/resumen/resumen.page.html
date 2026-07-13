@@ -1,0 +1,66 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Resumen
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="totales">
+    <div class="total-box total-ingresos">
+      <p>Ingresos</p>
+      <h2>{{ totalIngresos }}</h2>
+    </div>
+    <div class="total-box total-cobros">
+      <p>Cobros</p>
+      <h2>{{ totalCobros }}</h2>
+    </div>
+    <div class="total-box" [ngClass]="balance >= 0 ? 'total-ingresos' : 'total-cobros'">
+      <p>Balance ({{ balance >= 0 ? 'Positivo' : 'Negativo' }})</p>
+      <h2>{{ balance }}</h2>
+    </div>
+  </div>
+
+  <h2 class="tabla-titulo">Movimientos Manuales</h2>
+  <div class="filtro-mes">
+    <mat-form-field appearance="outline">
+      <mat-label>Filtrar por Mes</mat-label>
+      <input matInput readonly [matDatepicker]="mesPicker" [(ngModel)]="mesSeleccionado"
+        name="mesSeleccionado" (click)="mesPicker.open()">
+      <mat-datepicker-toggle matIconSuffix [for]="mesPicker"></mat-datepicker-toggle>
+      <mat-datepicker #mesPicker startView="year" (monthSelected)="onMesSeleccionado($event, mesPicker)"></mat-datepicker>
+    </mat-form-field>
+    <ion-button color="medium" (click)="limpiarFiltroMes()">Limpiar Filtro</ion-button>
+  </div>
+
+  <ion-list class="resumen-list" *ngIf="manuales.length; else vacioManuales">
+    <ion-item *ngFor="let item of manuales">
+      <ion-label>
+        <h2>{{ item.descripcion }}</h2>
+        <p>Monto: {{ item.monto }} · Tipo: {{ item.tipo === 'debito' ? 'Débito' : 'Crédito' }}</p>
+        <p>Fecha: {{ item.fecha | date:'short' }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ng-template #vacioManuales>
+    <p class="ion-text-center">No hay movimientos manuales registrados.</p>
+  </ng-template>
+
+  <h2 class="tabla-titulo">Movimientos Automáticos</h2>
+  <ion-list class="resumen-list" *ngIf="automaticos.length; else vacioAutomaticos">
+    <ion-item *ngFor="let item of automaticos">
+      <ion-label>
+        <h2>{{ item.descripcion }}</h2>
+        <p>Monto: {{ item.monto }} · Tipo: {{ item.tipo === 'debito' ? 'Débito' : 'Crédito' }}</p>
+        <p>Fecha: {{ item.fecha | date:'short' }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ng-template #vacioAutomaticos>
+    <p class="ion-text-center">No hay movimientos automáticos registrados.</p>
+  </ng-template>
+</ion-content>
