@@ -1,3 +1,5 @@
+export {};
+
 const USUARIO_STORAGE_KEY = 'skeletonapp_usuario';
 
 // Fecha ISO relativa a "hoy" para que el test no dependa de cuándo se corra:
