@@ -11,7 +11,7 @@ const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full'
   },
-  
+
   {
     path: 'home',
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
@@ -39,6 +39,14 @@ const routes: Routes = [
   {
     path: 'resumen',
     loadChildren: () => import('./resumen/resumen.module').then( m => m.ResumenPageModule)
+  },
+  {
+    path: 'not-found',
+    loadChildren: () => import('./not-found/not-found.module').then( m => m.NotFoundPageModule)
+  },
+  {
+    path: '**',
+    redirectTo: 'not-found'
   },
 ];
 
