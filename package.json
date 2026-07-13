@@ -10,7 +10,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:ci": "ng test --watch=false --browsers=ChromeHeadlessCI",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "e2e": "cypress open",
+    "e2e:run": "cypress run --browser edge"
   },
   "private": true,
   "dependencies": {
@@ -55,6 +57,7 @@
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
     "baseline-browser-mapping": "^2.10.42",
+    "cypress": "^15.18.1",
     "eslint": "^9.16.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsdoc": "^48.2.1",

@@ -29,6 +29,11 @@ log.txt
 /out-tsc
 /bazel-out
 
+# Cypress artifacts (generados al correr los tests, no son código fuente)
+/cypress/videos
+/cypress/screenshots
+/cypress/downloads
+
 # Node
 /node_modules
 npm-debug.log
