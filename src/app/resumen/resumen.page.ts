@@ -3,7 +3,6 @@ import { ViewWillEnter } from '@ionic/angular';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { BdService } from '../services/bd.service';
 import { UsuarioService } from '../services/usuario.service';
-import { AutoMoviService } from '../services/auto-movi.service';
 
 interface ResumenItem {
   descripcion: string;
@@ -33,8 +32,7 @@ export class ResumenPage implements ViewWillEnter {
 
   constructor(
     private bdService: BdService,
-    private usuarioService: UsuarioService,
-    private autoMoviService: AutoMoviService
+    private usuarioService: UsuarioService
   ) {}
 
   async ionViewWillEnter() {
@@ -52,14 +50,19 @@ export class ResumenPage implements ViewWillEnter {
       this.manualesOriginal = [];
     }
 
-    this.automaticos = this.autoMoviService.listar()
-      .map(a => ({
-        descripcion: a.nombre,
-        monto: a.monto,
-        tipo: a.tipo,
-        fecha: a.fechaFactura
-      }))
-      .sort((a, b) => b.fecha.getTime() - a.fecha.getTime());
+    try {
+      const autoRegistros = await this.bdService.listarAutoMovimientos(this.usuarioService.usuario);
+      this.automaticos = autoRegistros
+        .map(a => ({
+          descripcion: a.nombre,
+          monto: a.monto,
+          tipo: a.tipo,
+          fecha: new Date(a.fechaFactura)
+        }))
+        .sort((a, b) => b.fecha.getTime() - a.fecha.getTime());
+    } catch (error) {
+      this.automaticos = [];
+    }
 
     this.mesSeleccionado = new Date();
     this.aplicarFiltroMes();

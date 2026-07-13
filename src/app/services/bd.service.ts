@@ -28,6 +28,16 @@ export interface MovimientoRegistrado {
   fechaModificacion: string;
 }
 
+export interface AutoMovimientoRegistrado {
+  id?: number;
+  usuario: string;
+  nombre: string;
+  monto: number;
+  frecuencia: 'mensual' | 'anual';
+  fechaFactura: string;
+  tipo: 'debito' | 'credito';
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -91,6 +101,20 @@ export class BdService {
         fecha_movimiento TEXT NOT NULL,
         fecha_creacion TEXT NOT NULL,
         fecha_modificacion TEXT NOT NULL,
+        FOREIGN KEY (usuario) REFERENCES usuarios (usuario)
+      )`,
+      []
+    );
+
+    await this.db.executeSql(
+      `CREATE TABLE IF NOT EXISTS auto_movimientos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        usuario TEXT NOT NULL,
+        nombre TEXT NOT NULL,
+        monto REAL NOT NULL,
+        frecuencia TEXT NOT NULL,
+        fecha_factura TEXT NOT NULL,
+        tipo TEXT NOT NULL,
         FOREIGN KEY (usuario) REFERENCES usuarios (usuario)
       )`,
       []
@@ -224,6 +248,59 @@ export class BdService {
     }
 
     await this.db.executeSql('DELETE FROM movimientos WHERE id = ?', [id]);
+  }
+
+  async agregarAutoMovimiento(autoMovimiento: Pick<AutoMovimientoRegistrado, 'usuario' | 'nombre' | 'monto' | 'frecuencia' | 'fechaFactura' | 'tipo'>): Promise<void> {
+    await this.listo;
+
+    if (!this.db) {
+      throw new Error('SQLite no está disponible en este entorno (solo funciona en el dispositivo nativo).');
+    }
+
+    await this.db.executeSql(
+      `INSERT INTO auto_movimientos (usuario, nombre, monto, frecuencia, fecha_factura, tipo)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [autoMovimiento.usuario, autoMovimiento.nombre, autoMovimiento.monto, autoMovimiento.frecuencia, autoMovimiento.fechaFactura, autoMovimiento.tipo]
+    );
+  }
+
+  async listarAutoMovimientos(usuario: string): Promise<AutoMovimientoRegistrado[]> {
+    await this.listo;
+
+    if (!this.db) {
+      throw new Error('SQLite no está disponible en este entorno (solo funciona en el dispositivo nativo).');
+    }
+
+    const resultado = await this.db.executeSql(
+      'SELECT id, usuario, nombre, monto, frecuencia, fecha_factura, tipo FROM auto_movimientos WHERE usuario = ? ORDER BY fecha_factura DESC',
+      [usuario]
+    );
+
+    const autoMovimientos: AutoMovimientoRegistrado[] = [];
+    for (let i = 0; i < resultado.rows.length; i++) {
+      const fila = resultado.rows.item(i);
+      autoMovimientos.push({
+        id: fila.id,
+        usuario: fila.usuario,
+        nombre: fila.nombre,
+        monto: fila.monto,
+        frecuencia: fila.frecuencia,
+        fechaFactura: fila.fecha_factura,
+        tipo: fila.tipo
+      });
+    }
+
+    return autoMovimientos;
+  }
+
+  async eliminarAutoMovimiento(id: number): Promise<void> {
+    await this.listo;
+
+    if (!this.db) {
+      throw new Error('SQLite no está disponible en este entorno (solo funciona en el dispositivo nativo).');
+    }
+
+    await this.db.executeSql('DELETE FROM auto_movimientos WHERE id = ?', [id]);
   }
 
 }
