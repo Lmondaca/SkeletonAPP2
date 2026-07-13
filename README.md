@@ -6,7 +6,7 @@ Aplicación móvil de control de ingresos y gastos personales, desarrollada con 
 
 Antes de comenzar, asegúrate de tener instalado:
 
-- [Node.js](https://nodejs.org/) (versión 18.19 o superior)
+- [Node.js](https://nodejs.org/) (`^20.19.0`, `^22.12.0` o `>=24.0.0`, según requiere Angular CLI 20)
 - [npm](https://www.npmjs.com/) (viene con Node.js)
 
 ## Instalación
@@ -68,6 +68,16 @@ Todas las páginas posteriores al login incluyen un menú lateral (☰) para nav
 
 > **Nota:** SQLite (vía `@awesome-cordova-plugins/sqlite` + `cordova-sqlite-storage`) solo funciona en el dispositivo/emulador nativo (Android/iOS). Al correr con `ionic serve` en el navegador, `BdService` detecta la ausencia del entorno Cordova y omite la inicialización de la base de datos.
 
+### Consumo de APIs (base genérica)
+
+El proyecto incluye una base lista para consumir servicios HTTP externos en el futuro:
+
+- `HttpClient` está habilitado globalmente en `AppModule` mediante `provideHttpClient()` (reemplazo moderno de `HttpClientModule`).
+- `ApiService` (`src/app/services/api.service.ts`) expone métodos genéricos `get`, `post`, `put` y `delete`, tipados con generics y construidos sobre `environment.apiUrl`.
+- `environment.apiUrl` (en `src/environments/environment.ts` y `environment.prod.ts`) centraliza la URL base de la API; hoy es un valor de ejemplo (`https://api.example.com`) que debe reemplazarse cuando exista un backend real.
+
+Para consumir un endpoint desde cualquier página o servicio, basta con inyectar `ApiService` y llamar, por ejemplo, `this.apiService.get<MiTipo>('recurso')`.
+
 ## Estructura del Proyecto
 
 - `src/app/` - Contiene los componentes principales de la aplicación
@@ -81,7 +91,7 @@ Todas las páginas posteriores al login incluyen un menú lateral (☰) para nav
   - `resumen/` - Resumen de ingresos, cobros y balance
   - `not-found/` - Página 404
   - `guards/` - `authGuard`, guarda de rutas basada en la sesión activa
-  - `services/` - Servicios compartidos (`UsuarioService` para la sesión, `BdService` para SQLite, movimientos, movimientos automáticos)
+  - `services/` - Servicios compartidos (`UsuarioService` para la sesión, `BdService` para SQLite, `ApiService` para consumo de APIs HTTP, movimientos, movimientos automáticos)
 - `src/assets/` - Recursos estáticos (íconos e imágenes)
 - `src/environments/` - Configuraciones de entorno
 - `src/theme/` - Estilos globales y variables (paleta blanco/gris/negro)
