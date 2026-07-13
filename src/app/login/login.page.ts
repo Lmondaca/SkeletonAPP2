@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { UsuarioService } from '../services/usuario.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,10 @@ export class LoginPage implements OnInit {
   private readonly usuarioPattern = /^[a-zA-Z0-9]{3,8}$/;
   private readonly contrasenaPattern = /^[0-9]{4}$/;
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private usuarioService: UsuarioService
+  ) { }
 
   ngOnInit() {
   }
@@ -25,14 +29,13 @@ export class LoginPage implements OnInit {
       return;
     }
 
-    const navigationExtras: NavigationExtras = {
-      queryParams: {
-        usuario: this.usuario
-      },
-      replaceUrl: true
-    };
+    this.usuarioService.usuario = this.usuario;
 
-    this.router.navigate(['/home'], navigationExtras);
+    this.router.navigate(['/home'], { replaceUrl: true });
+  }
+
+  irRegistro() {
+    this.router.navigate(['/registro']);
   }
 
 }

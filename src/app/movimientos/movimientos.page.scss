@@ -1,0 +1,17 @@
+.filtros,
+.resumen,
+.movimientos-list {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.filtros {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.resumen {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}

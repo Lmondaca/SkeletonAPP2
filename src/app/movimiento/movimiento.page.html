@@ -1,0 +1,48 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Movimiento
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <form #movimientoForm="ngForm">
+    <ion-item>
+      <ion-input label="Descripción" labelPlacement="floating" placeholder="Ingrese una descripción"
+        name="descripcion" [(ngModel)]="descripcion"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input label="Monto" labelPlacement="floating" placeholder="Ingrese el monto"
+        type="number" name="monto" [(ngModel)]="monto"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Tipo</ion-label>
+      <ion-segment name="tipo" [(ngModel)]="tipo">
+        <ion-segment-button value="debito">
+          <ion-label>Débito</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="credito">
+          <ion-label>Crédito</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+
+    <mat-form-field appearance="outline" class="ion-margin-top full-width">
+      <mat-label>Fecha de Movimiento</mat-label>
+      <input matInput [matDatepicker]="picker" name="fechaMovimiento" [(ngModel)]="fechaMovimiento">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="ion-padding-top ion-text-center">
+      <ion-button color="medium" (click)="guardar()">Guardar</ion-button>
+      <ion-button color="medium" (click)="irMovimientos()">Ver Movimientos</ion-button>
+    </div>
+  </form>
+</ion-content>

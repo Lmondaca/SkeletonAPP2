@@ -1,0 +1,52 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Registro
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <form #registroForm="ngForm">
+    <ion-item>
+      <ion-input label="Nombre" labelPlacement="floating" placeholder="Ingrese su nombre"
+        name="nombre" [(ngModel)]="nombre" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input label="Apellido" labelPlacement="floating" placeholder="Ingrese su apellido"
+        name="apellido" [(ngModel)]="apellido" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input label="Nombre de Usuario" labelPlacement="floating" placeholder="Ingrese su usuario"
+        name="usuario" [(ngModel)]="usuario" #usuarioField="ngModel"
+        required minlength="3" maxlength="8" pattern="^[a-zA-Z0-9]+$"></ion-input>
+    </ion-item>
+    <ion-note color="danger" *ngIf="usuarioField.invalid && usuarioField.touched">
+      El usuario debe ser alfanumérico, entre 3 y 8 caracteres.
+    </ion-note>
+
+    <ion-item>
+      <ion-input label="Contraseña" labelPlacement="floating" type="password" placeholder="Ingrese su Contraseña"
+        name="contrasena" [(ngModel)]="contrasena" #contrasenaField="ngModel"
+        required maxlength="4" inputmode="numeric" pattern="^[0-9]{4}$"></ion-input>
+    </ion-item>
+    <ion-note color="danger" *ngIf="contrasenaField.invalid && contrasenaField.touched">
+      La contraseña debe ser numérica de 4 dígitos.
+    </ion-note>
+
+    <ion-item>
+      <ion-input label="Confirmar Contraseña" labelPlacement="floating" type="password" placeholder="Repita su Contraseña"
+        name="confirmarContrasena" [(ngModel)]="confirmarContrasena" #confirmarContrasenaField="ngModel"
+        required maxlength="4" inputmode="numeric"></ion-input>
+    </ion-item>
+    <ion-note color="danger" *ngIf="confirmarContrasenaField.touched && contrasenasNoCoinciden">
+      Las contraseñas no coinciden.
+    </ion-note>
+
+    <div class="ion-padding-top ion-text-center">
+      <ion-button color="medium" [disabled]="registroForm.invalid || contrasenasNoCoinciden" (click)="registrar()">Registrarse</ion-button>
+    </div>
+  </form>
+</ion-content>

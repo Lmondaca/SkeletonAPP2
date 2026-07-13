@@ -1,0 +1,59 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Movimiento Automático
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <form #autoMoviForm="ngForm">
+    <ion-item>
+      <ion-input label="Nombre" labelPlacement="floating" placeholder="Ej: Sueldo, Netflix, Seguro..."
+        name="nombre" [(ngModel)]="nombre"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Frecuencia</ion-label>
+      <ion-segment name="frecuencia" [(ngModel)]="frecuencia">
+        <ion-segment-button value="mensual">
+          <ion-label>Mensual</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="anual">
+          <ion-label>Anual</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+
+    <ion-item>
+      <ion-input label="Precio" labelPlacement="floating" placeholder="Ingrese el precio"
+        type="number" name="monto" [(ngModel)]="monto"></ion-input>
+    </ion-item>
+
+    <mat-form-field appearance="outline" class="ion-margin-top full-width">
+      <mat-label>Fecha de Factura</mat-label>
+      <input matInput [matDatepicker]="picker" name="fechaFactura" [(ngModel)]="fechaFactura">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <ion-item>
+      <ion-label>Tipo</ion-label>
+      <ion-segment name="tipo" [(ngModel)]="tipo">
+        <ion-segment-button value="debito">
+          <ion-label>Débito</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="credito">
+          <ion-label>Crédito</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+
+    <div class="ion-padding-top ion-text-center">
+      <ion-button color="medium" (click)="guardar()">Guardar</ion-button>
+    </div>
+  </form>
+</ion-content>

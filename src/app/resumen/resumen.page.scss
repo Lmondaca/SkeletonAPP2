@@ -1,0 +1,56 @@
+.totales {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto 16px;
+}
+
+.total-box {
+  flex: 1 1 120px;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.total-box p {
+  margin: 0 0 4px;
+  font-size: 14px;
+}
+
+.total-box h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.total-ingresos {
+  background-color: var(--ion-color-success, #2dd36f);
+}
+
+.total-cobros {
+  background-color: var(--ion-color-danger, #eb445a);
+}
+
+.resumen-list {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.tabla-titulo {
+  max-width: 480px;
+  margin: 16px auto 8px;
+  font-size: 18px;
+}
+
+.filtro-mes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 480px;
+  margin: 0 auto 8px;
+}
+
+.filtro-mes mat-form-field {
+  flex: 1;
+}

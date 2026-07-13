@@ -1,0 +1,56 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Movimientos
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="filtros">
+    <mat-form-field appearance="outline">
+      <mat-label>Desde</mat-label>
+      <input matInput [matDatepicker]="pickerDesde" name="fechaDesde" [(ngModel)]="fechaDesde">
+      <mat-datepicker-toggle matIconSuffix [for]="pickerDesde"></mat-datepicker-toggle>
+      <mat-datepicker #pickerDesde></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Hasta</mat-label>
+      <input matInput [matDatepicker]="pickerHasta" name="fechaHasta" [(ngModel)]="fechaHasta">
+      <mat-datepicker-toggle matIconSuffix [for]="pickerHasta"></mat-datepicker-toggle>
+      <mat-datepicker #pickerHasta></mat-datepicker>
+    </mat-form-field>
+
+    <div class="ion-text-center">
+      <ion-button color="medium" (click)="filtrar()">Filtrar</ion-button>
+      <ion-button color="medium" (click)="limpiarFiltro()">Limpiar Filtro</ion-button>
+    </div>
+  </div>
+
+  <ion-item lines="full" class="resumen">
+    <ion-label>
+      <p>Total Créditos: {{ totalCredito }}</p>
+      <p>Total Débitos: {{ totalDebito }}</p>
+    </ion-label>
+  </ion-item>
+
+  <ion-list class="movimientos-list" *ngIf="movimientosFiltrados.length; else vacio">
+    <ion-item *ngFor="let m of movimientosFiltrados">
+      <ion-label>
+        <h2>{{ m.descripcion }}</h2>
+        <p>Monto: {{ m.monto }} · Tipo: {{ m.tipo === 'debito' ? 'Débito' : 'Crédito' }}</p>
+        <p>Movimiento: {{ m.fechaMovimiento | date:'short' }}</p>
+        <p>Creado: {{ m.fechaCreacion | date:'short' }}</p>
+        <p>Modificado: {{ m.fechaModificacion | date:'short' }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #vacio>
+    <p class="ion-text-center">No hay movimientos para el periodo seleccionado.</p>
+  </ng-template>
+</ion-content>
