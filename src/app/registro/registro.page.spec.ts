@@ -1,11 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegistroPage } from './registro.page';
+import { RegistroPageModule } from './registro.module';
+import { sqliteMockProvider } from '../../testing/sqlite-mock';
 
 describe('RegistroPage', () => {
   let component: RegistroPage;
   let fixture: ComponentFixture<RegistroPage>;
 
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [RegistroPageModule],
+      providers: [sqliteMockProvider]
+    });
     fixture = TestBed.createComponent(RegistroPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
