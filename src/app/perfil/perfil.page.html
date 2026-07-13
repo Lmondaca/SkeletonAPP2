@@ -43,6 +43,9 @@
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
+    <ion-note color="danger" *ngIf="esMenorDeEdad">
+      Debes ser mayor de 18 años.
+    </ion-note>
 
     <div class="ion-padding-top ion-text-center">
       <ion-button color="medium" (click)="guardar()">Guardar</ion-button>

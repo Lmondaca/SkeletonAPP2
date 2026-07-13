@@ -22,8 +22,28 @@ export class PerfilPage implements ViewWillEnter {
     private bdService: BdService
   ) {}
 
+  private readonly edadMinima = 18;
+
   get usuario(): string {
     return this.usuarioService.usuario;
+  }
+
+  get esMenorDeEdad(): boolean {
+    if (!this.fechaNacimiento) {
+      return false;
+    }
+
+    const hoy = new Date();
+    let edad = hoy.getFullYear() - this.fechaNacimiento.getFullYear();
+    const aunNoCumpleAnios =
+      hoy.getMonth() < this.fechaNacimiento.getMonth() ||
+      (hoy.getMonth() === this.fechaNacimiento.getMonth() && hoy.getDate() < this.fechaNacimiento.getDate());
+
+    if (aunNoCumpleAnios) {
+      edad--;
+    }
+
+    return edad < this.edadMinima;
   }
 
   async ionViewWillEnter() {
@@ -41,7 +61,7 @@ export class PerfilPage implements ViewWillEnter {
   }
 
   async guardar() {
-    if (!this.nombre || !this.apellido || !this.nivelEducacion || !this.fechaNacimiento) {
+    if (!this.nombre || !this.apellido || !this.nivelEducacion || !this.fechaNacimiento || this.esMenorDeEdad) {
       return;
     }
 
