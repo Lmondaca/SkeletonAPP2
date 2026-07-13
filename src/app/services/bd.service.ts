@@ -303,4 +303,14 @@ export class BdService {
     await this.db.executeSql('DELETE FROM auto_movimientos WHERE id = ?', [id]);
   }
 
+  async actualizarFechaFacturaAutoMovimiento(id: number, fechaFactura: string): Promise<void> {
+    await this.listo;
+
+    if (!this.db) {
+      throw new Error('SQLite no está disponible en este entorno (solo funciona en el dispositivo nativo).');
+    }
+
+    await this.db.executeSql('UPDATE auto_movimientos SET fecha_factura = ? WHERE id = ?', [fechaFactura, id]);
+  }
+
 }

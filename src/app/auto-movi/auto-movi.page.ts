@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { BdService } from '../services/bd.service';
 import { UsuarioService } from '../services/usuario.service';
@@ -18,6 +19,7 @@ export class AutoMoviPage {
   tipo: 'debito' | 'credito' = 'debito';
 
   constructor(
+    private router: Router,
     private alertController: AlertController,
     private bdService: BdService,
     private usuarioService: UsuarioService
@@ -58,6 +60,10 @@ export class AutoMoviPage {
       });
       await alert.present();
     }
+  }
+
+  irAutoMovimientos() {
+    this.router.navigate(['/auto-movimientos']);
   }
 
 }
