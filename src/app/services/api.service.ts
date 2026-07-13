@@ -28,4 +28,9 @@ export class ApiService {
     return this.http.delete<T>(`${this.baseUrl}/${path}`);
   }
 
+  // TODO: cuando esté disponible la API en Python (endpoint tipo GET /dolar
+  // que expone el valor diario del Banco Central), consumirla desde
+  // DolarService vía this.get<{ valor: number }>('dolar'). No requiere
+  // cambios en este servicio genérico, solo en environment.apiUrl.
+
 }

@@ -4,6 +4,8 @@
 
 export const environment = {
   production: false,
+  // TODO: reemplazar por la URL real de la API en Python (Banco Central /
+  // valor del dólar) una vez esté desplegada.
   apiUrl: 'https://api.example.com'
 };
 

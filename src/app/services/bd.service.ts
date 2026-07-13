@@ -38,6 +38,9 @@ export interface AutoMovimientoRegistrado {
   tipo: 'debito' | 'credito';
 }
 
+// TODO: agregar interfaz ValorDolar { fecha: string; valor: number } para el
+// caché diario del valor del dólar obtenido desde la API en Python.
+
 @Injectable({
   providedIn: 'root'
 })
@@ -119,6 +122,15 @@ export class BdService {
       )`,
       []
     );
+
+    // TODO: crear tabla `valor_dolar` para cachear el valor diario obtenido
+    // desde la API en Python (que a su vez consulta al Banco Central):
+    //   CREATE TABLE IF NOT EXISTS valor_dolar (
+    //     fecha TEXT PRIMARY KEY,
+    //     valor REAL NOT NULL
+    //   )
+    // `fecha` como PRIMARY KEY (no UNIQUE por usuario) porque el valor del
+    // dólar es global, no depende de la sesión.
   }
 
   async guardarUsuario(usuario: UsuarioRegistrado): Promise<void> {
@@ -312,5 +324,13 @@ export class BdService {
 
     await this.db.executeSql('UPDATE auto_movimientos SET fecha_factura = ? WHERE id = ?', [fechaFactura, id]);
   }
+
+  // TODO: guardarValorDolar(valorDolar: ValorDolar): Promise<void>
+  //   INSERT OR REPLACE INTO valor_dolar (fecha, valor) VALUES (?, ?)
+
+  // TODO: obtenerValorDolar(fecha: string): Promise<ValorDolar | null>
+  //   SELECT fecha, valor FROM valor_dolar WHERE fecha = ?
+  //   Retorna null si no hay valor cacheado para esa fecha (típicamente hoy),
+  //   lo que le indica a DolarService que debe llamar a la API en Python.
 
 }
