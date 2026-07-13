@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
     path: 'login',
+    canActivate: [authGuard],
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   },
   {
@@ -14,34 +16,42 @@ const routes: Routes = [
 
   {
     path: 'home',
+    canActivate: [authGuard],
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   },
   {
     path: 'perfil',
+    canActivate: [authGuard],
     loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule)
   },
   {
     path: 'movimiento',
+    canActivate: [authGuard],
     loadChildren: () => import('./movimiento/movimiento.module').then( m => m.MovimientoPageModule)
   },
   {
     path: 'movimientos',
+    canActivate: [authGuard],
     loadChildren: () => import('./movimientos/movimientos.module').then( m => m.MovimientosPageModule)
   },
   {
     path: 'auto-movi',
+    canActivate: [authGuard],
     loadChildren: () => import('./auto-movi/auto-movi.module').then( m => m.AutoMoviPageModule)
   },
   {
     path: 'registro',
+    canActivate: [authGuard],
     loadChildren: () => import('./registro/registro.module').then( m => m.RegistroPageModule)
   },
   {
     path: 'resumen',
+    canActivate: [authGuard],
     loadChildren: () => import('./resumen/resumen.module').then( m => m.ResumenPageModule)
   },
   {
     path: 'not-found',
+    canActivate: [authGuard],
     loadChildren: () => import('./not-found/not-found.module').then( m => m.NotFoundPageModule)
   },
   {
